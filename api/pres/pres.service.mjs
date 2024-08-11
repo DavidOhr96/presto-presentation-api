@@ -3,9 +3,9 @@ export const presService = {
     add
 }
 
-async function add(data) {
+async function add(newPresData) {
     try {
-        const { title, authors, dateOfPub } = data
+        const { title, authors, dateOfPub } = newPresData
         //function to check title uniqe
         const presToAdd = {
             title,
@@ -13,6 +13,7 @@ async function add(data) {
             dateOfPub
         }
         const collection = await dbService.getCollection('pres')
+        console.log(collection)
         await collection.insertOne(presToAdd)
         return presToAdd
     }
