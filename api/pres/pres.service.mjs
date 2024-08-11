@@ -7,7 +7,6 @@ export const presService = {
 async function add(newPresData) {
     try {
         const { title, authors, dateOfPub } = newPresData
-        //function to check title uniqe
         const collection = await dbService.getCollection('pres')
         const existingPres = await collection.findOne({ title })
         if (existingPres) {
@@ -28,7 +27,6 @@ async function add(newPresData) {
 
 async function get(presTitle) {
     try {
-        console.log(presTitle)
         const collection = await dbService.getCollection('pres')
         const pres = collection.findOne({ presTitle })
         return pres
