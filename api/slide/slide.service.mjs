@@ -1,19 +1,19 @@
 import { dbService } from '../../services/db.service.mjs'
+import { presService } from '../pres/pres.service.mjs'
 
 export const slideService = {
     add,
 }
 
-async function add(newSlideData){
-    try{
-        const slideDataToAdd={...newSlideData}
+async function add(newSlideData) {
+    try {
+        const slideDataToAdd = { ...newSlideData }
         const collection = await dbService.getCollection('slide')
-        console.log(slideDataToAdd)
         await collection.insertOne(slideDataToAdd)
-        console.log('hello?')
+        presService.updateNewSlide(slideDataToAdd)
         return slideDataToAdd
     }
-    catch(err){
+    catch (err) {
         throw err
     }
 }

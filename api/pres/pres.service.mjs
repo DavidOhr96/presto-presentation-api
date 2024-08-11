@@ -1,12 +1,13 @@
 import { dbService } from '../../services/db.service.mjs'
 export const presService = {
     add,
-    get
+    get,
+    updateNewSlide
 }
 
 async function add(newPresData) {
     try {
-        const { title, authors, dateOfPub } = newPresData
+        const { title, authors, dateOfPub, slides } = newPresData
         const collection = await dbService.getCollection('pres')
         const existingPres = await collection.findOne({ title })
         if (existingPres) {
@@ -15,7 +16,8 @@ async function add(newPresData) {
         const presToAdd = {
             title,
             authors,
-            dateOfPub
+            dateOfPub,
+            slides
         }
         await collection.insertOne(presToAdd)
         return presToAdd
@@ -32,6 +34,20 @@ async function get(presTitle) {
         return pres
     }
     catch (err) {
+        throw err
+    }
+}
+
+async function updateNewSlide(newSlide){
+    try{
+        const newSlideId=newSlide._id.toString()
+        const presToUpdateTitle=newSlide.presTitle
+
+        const collection = await dbService.getCollection('pres')
+        const presToUpdate=await collection.updateOne({title:presToUpdateTitle}, {$push:{slides:newSlideId}})
+        return presToUpdate
+    }
+    catch (err){
         throw err
     }
 }
