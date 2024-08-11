@@ -1,6 +1,7 @@
 import { dbService } from '../../services/db.service.mjs'
 export const presService = {
-    add
+    add,
+    get
 }
 
 async function add(newPresData) {
@@ -19,6 +20,18 @@ async function add(newPresData) {
         }
         await collection.insertOne(presToAdd)
         return presToAdd
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function get(presTitle) {
+    try {
+        console.log(presTitle)
+        const collection = await dbService.getCollection('pres')
+        const pres = collection.findOne({ presTitle })
+        return pres
     }
     catch (err) {
         throw err
