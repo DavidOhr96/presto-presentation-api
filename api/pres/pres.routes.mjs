@@ -1,5 +1,7 @@
 import express from 'express'
+import { addPres } from './pres.controller.mjs'
+const router = express.Router()
 
-const router= express.Router()
+router.post('/', addPres)
 
-router.get
+export const presRoutes = router

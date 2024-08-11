@@ -1,4 +1,4 @@
-
+import { presService } from "./pres.service.mjs"
 export async function getPres(req, res) {
     try {
         const presName = req.params.name
@@ -9,5 +9,16 @@ export async function getPres(req, res) {
     }
     catch (err) {
         res.status(400).send({ err: ' Failed to get pres' })
+    }
+}
+
+export async function addPres(req, res) {
+    try {
+        const newPres = req.body
+        const addedPres = await presService.add(newPres)
+        res.json(addedPres)
+    }
+    catch (err) {
+        res.status(400).send({ err: 'Failed to add presentation' })
     }
 }

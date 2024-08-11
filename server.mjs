@@ -1,4 +1,6 @@
 import express from 'express'
+import http from 'http'
+import path from 'path'
 import cors from 'cors'
 
 const app = express();
@@ -10,9 +12,13 @@ const corsOptions = {
   origin: ['http://127.0.0.1:3000',
     'http://localhost:3000'
   ],
-  credentials:true
+  credentials: true
 }
 app.use(cors(corsOptions))
+
+import { presRoutes } from './api/pres/pres.routes.mjs'
+
+app.use('/api/pres',presRoutes)
 
 
 app.get("/", (req, res) => {
