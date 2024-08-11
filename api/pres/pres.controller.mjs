@@ -19,6 +19,8 @@ export async function addPres(req, res) {
         res.json(addedPres)
     }
     catch (err) {
+        console.log(err)
+        // res.status(400).send(err)
         res.status(400).send({ err: 'Failed to add presentation' })
     }
 }
