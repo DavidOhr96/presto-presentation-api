@@ -5,7 +5,8 @@ export const presService = {
     get,
     update,
     updateNewSlide,
-    removeSlideFromPres
+    removeSlideFromPres,
+    remove
 }
 
 async function add(newPresData) {
@@ -77,4 +78,15 @@ async function removeSlideFromPres(presTitle,slideId) {
             catch(err){
                 throw err
             }
+}
+
+async function remove(presToDelete){
+try{
+    const collection=await dbService.getCollection('pres')
+    await collection.deleteOne({title:presToDelete.title})
+    return
+}
+catch(err){
+    throw err
+}
 }

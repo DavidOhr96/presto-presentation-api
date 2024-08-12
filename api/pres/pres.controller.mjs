@@ -34,3 +34,15 @@ export async function updatePresByTitle(req, res) {
         res.status(400).send({ err: 'Failed to update presentation' })
     }
 }
+
+
+export async function deletePres(req, res) {
+    try {
+    const presToDelete=req.body
+    const result=await presService.remove(presToDelete)
+    res.json(result)
+    }
+    catch (err) {
+        res.status(400).send({ err: 'Failed to delete presentation' })
+    }
+}
