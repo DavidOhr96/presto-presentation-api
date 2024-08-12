@@ -1,9 +1,11 @@
+import { ObjectId } from 'mongodb'
 import { dbService } from '../../services/db.service.mjs'
 import { presService } from '../pres/pres.service.mjs'
 
 export const slideService = {
     add,
     get,
+    update,
 }
 
 async function add(newSlideData) {
@@ -23,9 +25,24 @@ async function get(slideId) {
     try {
         const collection = await dbService.getCollection('slide')
         console.log(slideId)
-        const slide= collection.findOne({_id:slideId})
+        const slide = collection.findOne({ _id: slideId })
         console.log(slide)
         return slide
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function update(slide) {
+    try {
+        const id = slide._id
+        delete slide._id
+        const collection = await dbService.getCollection('slide')
+        await collection.updateOne({ _id: new ObjectId(id) }, { $set: slide })
+        slide._id = id
+        return slide
+
     }
     catch (err) {
         throw err

@@ -11,3 +11,13 @@ export async function addSlide(req, res) {
     }
 }
 
+export async function updateSlide(req, res) {
+    try {
+        const slide = req.body
+        const updatedSlide = await slideService.update(slide)
+        res.json(updatedSlide)
+    }
+    catch (err) {
+        res.status(400).send({ err: 'Failed to update slide' })
+    }
+}
