@@ -10,3 +10,4 @@ export async function addSlide(req, res) {
         res.status(400).send({ err: 'Failed to add slide' })
     }
 }
+

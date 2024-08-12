@@ -30,7 +30,7 @@ async function add(newPresData) {
 async function get(presTitle) {
     try {
         const collection = await dbService.getCollection('pres')
-        const pres = collection.findOne({ presTitle })
+        const pres = collection.findOne({ title:presTitle })
         return pres
     }
     catch (err) {

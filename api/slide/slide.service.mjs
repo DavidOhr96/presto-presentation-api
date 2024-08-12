@@ -3,6 +3,7 @@ import { presService } from '../pres/pres.service.mjs'
 
 export const slideService = {
     add,
+    get,
 }
 
 async function add(newSlideData) {
@@ -12,6 +13,19 @@ async function add(newSlideData) {
         await collection.insertOne(slideDataToAdd)
         presService.updateNewSlide(slideDataToAdd)
         return slideDataToAdd
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function get(slideId) {
+    try {
+        const collection = await dbService.getCollection('slide')
+        console.log(slideId)
+        const slide= collection.findOne({_id:slideId})
+        console.log(slide)
+        return slide
     }
     catch (err) {
         throw err
