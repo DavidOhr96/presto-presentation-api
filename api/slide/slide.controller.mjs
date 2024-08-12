@@ -21,3 +21,14 @@ export async function updateSlide(req, res) {
         res.status(400).send({ err: 'Failed to update slide' })
     }
 }
+
+export async function deleteSlide(req, res) {
+    try {
+        const slide = req.body
+        const deletedSlide = await slideService.remove(slide)
+        res.json(deletedSlide)
+    }
+    catch (err) {
+        res.status(400).send({ err: 'Failed to delete slide' })
+    }
+}

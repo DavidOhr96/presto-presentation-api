@@ -2,6 +2,7 @@ import { dbService } from '../../services/db.service.mjs'
 export const presService = {
     add,
     get,
+    update,
     updateNewSlide
 }
 
@@ -48,6 +49,20 @@ async function updateNewSlide(newSlide){
         return presToUpdate
     }
     catch (err){
+        throw err
+    }
+}
+
+async function update(pres){
+    try{
+const presTitle=pres.title
+const newAuthors=pres.authors
+console.log(presTitle)
+const collection=await dbService.getCollection('pres')
+await collection.updateOne({title:presTitle},{$set:{authors:newAuthors}})
+return Pres
+    }
+    catch(err){
         throw err
     }
 }

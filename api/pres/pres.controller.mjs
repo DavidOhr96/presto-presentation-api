@@ -23,3 +23,14 @@ export async function addPres(req, res) {
         res.status(400).send({ err: 'Failed to add presentation' })
     }
 }
+
+export async function updatePresByTitle(req, res) {
+    try {
+    const presToUpdate=req.body
+    const updatedPres= await presService.update(presToUpdate)
+    res.json(updatedPres)
+    }
+    catch (err) {
+        res.status(400).send({ err: 'Failed to update presentation' })
+    }
+}

@@ -6,6 +6,7 @@ export const slideService = {
     add,
     get,
     update,
+    remove
 }
 
 async function add(newSlideData) {
@@ -48,3 +49,16 @@ async function update(slide) {
         throw err
     }
 }
+ async function remove(slide){
+    try {
+        const id = slide._id
+        const collection = await dbService.getCollection('slide')
+        await collection.deleteOne({ _id: new ObjectId(id) })
+        return slide
+
+    }
+    catch (err) {
+        throw err
+    }
+
+ }
