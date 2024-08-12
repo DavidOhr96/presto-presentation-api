@@ -1,9 +1,11 @@
+import { ObjectId } from 'mongodb'
 import { dbService } from '../../services/db.service.mjs'
 export const presService = {
     add,
     get,
     update,
-    updateNewSlide
+    updateNewSlide,
+    removeSlideFromPres
 }
 
 async function add(newPresData) {
@@ -57,12 +59,22 @@ async function update(pres){
     try{
 const presTitle=pres.title
 const newAuthors=pres.authors
-console.log(presTitle)
 const collection=await dbService.getCollection('pres')
 await collection.updateOne({title:presTitle},{$set:{authors:newAuthors}})
-return Pres
+return pres
     }
     catch(err){
         throw err
     }
+}
+
+async function removeSlideFromPres(presTitle,slideId) {
+    try{
+        const collection=await dbService.getCollection('pres')
+        const result=await collection.updateOne({title:presTitle},{$pull:{slides:slideId}})
+        console.log(result)
+            }
+            catch(err){
+                throw err
+            }
 }

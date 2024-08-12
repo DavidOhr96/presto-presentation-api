@@ -53,9 +53,10 @@ async function update(slide) {
     try {
         const id = slide._id
         const collection = await dbService.getCollection('slide')
-        await collection.deleteOne({ _id: new ObjectId(id) })
+        const result=await collection.deleteOne({ _id: new ObjectId(id) })
+        console.log(result)
+        await presService.removeSlideFromPres(slide.presTitle, id)
         return slide
-
     }
     catch (err) {
         throw err
