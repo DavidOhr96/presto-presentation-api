@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { dbService } from '../../services/db.service.mjs'
+import { slideService } from '../slide/slide.service.mjs'
 export const presService = {
     add,
     get,
@@ -34,7 +35,7 @@ async function add(newPresData) {
 async function get(presTitle) {
     try {
         const collection = await dbService.getCollection('pres')
-        const pres = collection.findOne({ title:presTitle })
+        const pres = collection.findOne({ title: presTitle })
         return pres
     }
     catch (err) {
@@ -42,51 +43,55 @@ async function get(presTitle) {
     }
 }
 
-async function updateNewSlide(newSlide){
-    try{
-        const newSlideId=newSlide._id.toString()
-        const presToUpdateTitle=newSlide.presTitle
+async function updateNewSlide(newSlide) {
+    try {
+        const newSlideId = newSlide._id.toString()
+        const presToUpdateTitle = newSlide.presTitle
 
         const collection = await dbService.getCollection('pres')
-        const presToUpdate=await collection.updateOne({title:presToUpdateTitle}, {$push:{slides:newSlideId}})
+        const presToUpdate = await collection.updateOne({ title: presToUpdateTitle }, { $push: { slides: newSlideId } })
         return presToUpdate
     }
-    catch (err){
+    catch (err) {
         throw err
     }
 }
 
-async function update(pres){
-    try{
-const presTitle=pres.title
-const newAuthors=pres.authors
-const collection=await dbService.getCollection('pres')
-await collection.updateOne({title:presTitle},{$set:{authors:newAuthors}})
-return pres
+async function update(pres) {
+    try {
+        const presTitle = pres.title
+        const newAuthors = pres.authors
+        const collection = await dbService.getCollection('pres')
+        await collection.updateOne({ title: presTitle }, { $set: { authors: newAuthors } })
+        return pres
     }
-    catch(err){
+    catch (err) {
         throw err
     }
 }
 
-async function removeSlideFromPres(presTitle,slideId) {
-    try{
-        const collection=await dbService.getCollection('pres')
-        const result=await collection.updateOne({title:presTitle},{$pull:{slides:slideId}})
+async function removeSlideFromPres(presTitle, slideId) {
+    try {
+        const collection = await dbService.getCollection('pres')
+        const result = await collection.updateOne({ title: presTitle }, { $pull: { slides: slideId } })
         console.log(result)
-            }
-            catch(err){
-                throw err
-            }
+    }
+    catch (err) {
+        throw err
+    }
 }
 
-async function remove(presToDelete){
-try{
-    const collection=await dbService.getCollection('pres')
-    await collection.deleteOne({title:presToDelete.title})
-    return
-}
-catch(err){
-    throw err
-}
+async function remove(presToDelete) {
+    try {
+
+        for (const slideId of presToDelete.slides) {
+            await slideService.remove(slideId);
+        }
+        const collection = await dbService.getCollection('pres')
+        await collection.deleteOne({ title: presToDelete.title })
+        return
+    }
+    catch (err) {
+        throw err
+    }
 }
