@@ -46,3 +46,13 @@ export async function deletePres(req, res) {
         res.status(400).send({ err: 'Failed to delete presentation' })
     }
 }
+
+export async function queryAll(req, res) {
+    try {
+    const allPress= await presService.getAll()
+    res.json(allPress)
+    }
+    catch (err) {
+        res.status(400).send({ err: 'Failed to query all presentations' })
+    }
+}
