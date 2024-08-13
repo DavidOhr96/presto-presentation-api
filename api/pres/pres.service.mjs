@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb'
 import { dbService } from '../../services/db.service.mjs'
 import { slideService } from '../slide/slide.service.mjs'
+
+
 export const presService = {
     add,
     get,
@@ -48,10 +50,8 @@ async function updateNewSlide(newSlide) {
     try {
         const newSlideId = newSlide._id.toString()
         const presToUpdateTitle = newSlide.presTitle
-
         const collection = await dbService.getCollection('pres')
-        const presToUpdate = await collection.updateOne({ title: presToUpdateTitle }, { $push: { slides: newSlideId } })
-        return presToUpdate
+        await collection.updateOne({ title: presToUpdateTitle }, { $push: { slides: newSlideId } })
     }
     catch (err) {
         throw err
@@ -74,23 +74,30 @@ async function update(pres) {
 async function removeSlideFromPres(presTitle, slideId) {
     try {
         const collection = await dbService.getCollection('pres')
-        const result = await collection.updateOne({ title: presTitle }, { $pull: { slides: slideId } })
-        console.log(result)
+        await collection.updateOne({ title: presTitle }, { $pull: { slides: slideId } })
     }
     catch (err) {
         throw err
     }
 }
 
-async function remove(presToDelete) {
+async function remove(presTitle) {
     try {
-
-        for (const slideId of presToDelete.slides) {
-            await slideService.remove(slideId);
-        }
         const collection = await dbService.getCollection('pres')
-        await collection.deleteOne({ title: presToDelete.title })
-        return
+        const pres = await collection.findOne({ title: presTitle })
+        if (!pres) {
+            throw new Error('Presentation not found')
+        }
+        const slideIds = pres.slides
+        if (slideIds.length > 0) {
+            await Promise.all(slideIds.map(async (slideId) => {
+                await slideService.remove(slideId)
+
+            }))
+        }
+
+        const result = await collection.deleteOne({ title: presTitle })
+        return result
     }
     catch (err) {
         throw err
@@ -100,8 +107,7 @@ async function remove(presToDelete) {
 async function getAll() {
     try {
         const collection = await dbService.getCollection('pres')
-        const allPress = await collection.find().toArray()
-        return allPress
+        return await collection.find().toArray()
     }
     catch (err) {
         throw err

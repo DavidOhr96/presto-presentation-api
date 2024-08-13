@@ -1,6 +1,4 @@
 import express from 'express'
-import http from 'http'
-import path from 'path'
 import cors from 'cors'
 
 const app = express();
@@ -24,7 +22,7 @@ app.use('/api/slide', slideRoutes)
 
 
 app.get("/", (req, res) => {
-  res.send("Hello from Express!");
+  res.send("Hello from Presto!");
 });
 
 app.listen(PORT, () => {

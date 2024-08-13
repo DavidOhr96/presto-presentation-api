@@ -13,9 +13,10 @@ async function add(newSlideData) {
     try {
         const slideDataToAdd = { ...newSlideData }
         const collection = await dbService.getCollection('slide')
-        await collection.insertOne(slideDataToAdd)
-        presService.updateNewSlide(slideDataToAdd)
-        return slideDataToAdd
+        const result = await collection.insertOne(slideDataToAdd)
+        await presService.updateNewSlide({ _id: result.insertedId, presTitle: newSlideData.presTitle })
+
+        return { ...slideDataToAdd, _id: result.insertedId }
     }
     catch (err) {
         throw err
@@ -25,9 +26,7 @@ async function add(newSlideData) {
 async function get(slideId) {
     try {
         const collection = await dbService.getCollection('slide')
-        console.log(slideId)
-        const slide = collection.findOne({ _id: slideId })
-        console.log(slide)
+        const slide = collection.findOne({ _id: new ObjectId(slideId) })
         return slide
     }
     catch (err) {
@@ -35,27 +34,28 @@ async function get(slideId) {
     }
 }
 
-async function update(slide) {
+async function update(slideId, slideUpdates) {
     try {
-        const id = slide._id
-        delete slide._id
         const collection = await dbService.getCollection('slide')
-        await collection.updateOne({ _id: new ObjectId(id) }, { $set: slide })
-        slide._id = id
-        return slide
-
+        const result = await collection.updateOne({ _id: new ObjectId(slideId) }, { $set: slideUpdates })
+        if (result.matchedCount === 0) {
+            return null // No document found to update
+        }
+        return { _id: slideId, ...slideUpdates }
     }
     catch (err) {
         throw err
     }
 }
-async function remove(slide) {
+async function remove(slideId) {
     try {
-        const id = slide._id
         const collection = await dbService.getCollection('slide')
+        const slide = await collection.findOne({ _id: new ObjectId(slideId) })
         const result = await collection.deleteOne({ _id: new ObjectId(id) })
-        console.log(result)
-        await presService.removeSlideFromPres(slide.presTitle, id)
+        if (result.deletedCount === 0) {
+            throw new Error('Slide not found')
+        }
+        await presService.removeSlideFromPres(slide.presTitle, slideId)
         return slide
     }
     catch (err) {
