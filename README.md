@@ -62,7 +62,7 @@ A RESTful API built with Express.js for managing presentations and slides. This 
      - `GET /api/pres/:title` - Retrieve a presentation by title
      - `PUT /api/pres/:title` - Update a presentation by title
      - `DELETE /api/pres/:title` - Delete a presentation by title
-     - `GET /api/pres/all` - Retrieve all presentations
+     - `GET /api/pres` - Retrieve all presentations
 
    - **Slide Routes**
      - `POST /api/slide` - Add a new slide
