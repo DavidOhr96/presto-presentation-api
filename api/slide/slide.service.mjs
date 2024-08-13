@@ -37,6 +37,7 @@ async function get(slideId) {
 async function update(slideId, slideUpdates) {
     try {
         const collection = await dbService.getCollection('slide')
+        delete slideUpdates._id
         const result = await collection.updateOne({ _id: new ObjectId(slideId) }, { $set: slideUpdates })
         if (result.matchedCount === 0) {
             return null // No document found to update
@@ -51,7 +52,7 @@ async function remove(slideId) {
     try {
         const collection = await dbService.getCollection('slide')
         const slide = await collection.findOne({ _id: new ObjectId(slideId) })
-        const result = await collection.deleteOne({ _id: new ObjectId(id) })
+        const result = await collection.deleteOne({ _id: new ObjectId(slideId) })
         if (result.deletedCount === 0) {
             throw new Error('Slide not found')
         }

@@ -30,9 +30,6 @@ export async function updatePresByTitle(req, res) {
         const presTitle = req.params.title
         const presToUpdate = req.body
         const updatedPres = await presService.update(presTitle, presToUpdate)
-        if (!updatedPres) {
-            return res.status(404).send({ error: 'Presentation not found' })
-        }
         res.json(updatedPres)
     }
     catch (err) {

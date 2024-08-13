@@ -58,13 +58,12 @@ async function updateNewSlide(newSlide) {
     }
 }
 
-async function update(pres) {
+async function update(presTitle, presUpdates) {
     try {
-        const presTitle = pres.title
-        const newAuthors = pres.authors
+        const newAuthors = presUpdates.authors
         const collection = await dbService.getCollection('pres')
         await collection.updateOne({ title: presTitle }, { $set: { authors: newAuthors } })
-        return pres
+        return { title: presTitle, ...presUpdates }
     }
     catch (err) {
         throw err
