@@ -98,12 +98,12 @@ async function remove(presToDelete) {
 }
 
 async function getAll() {
-    try{
+    try {
         const collection = await dbService.getCollection('pres')
-        const allPress= await collection.find().toArray()
+        const allPress = await collection.find().toArray()
         return allPress
     }
-    catch(err){
+    catch (err) {
         throw err
     }
 }

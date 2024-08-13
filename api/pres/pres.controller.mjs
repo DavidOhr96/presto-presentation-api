@@ -26,9 +26,9 @@ export async function addPres(req, res) {
 
 export async function updatePresByTitle(req, res) {
     try {
-    const presToUpdate=req.body
-    const updatedPres= await presService.update(presToUpdate)
-    res.json(updatedPres)
+        const presToUpdate = req.body
+        const updatedPres = await presService.update(presToUpdate)
+        res.json(updatedPres)
     }
     catch (err) {
         res.status(400).send({ err: 'Failed to update presentation' })
@@ -38,9 +38,9 @@ export async function updatePresByTitle(req, res) {
 
 export async function deletePres(req, res) {
     try {
-    const presToDelete=req.body
-    const result=await presService.remove(presToDelete)
-    res.json(result)
+        const presToDelete = req.body
+        const result = await presService.remove(presToDelete)
+        res.json(result)
     }
     catch (err) {
         res.status(400).send({ err: 'Failed to delete presentation' })
@@ -49,8 +49,8 @@ export async function deletePres(req, res) {
 
 export async function queryAll(req, res) {
     try {
-    const allPress= await presService.getAll()
-    res.json(allPress)
+        const allPress = await presService.getAll()
+        res.json(allPress)
     }
     catch (err) {
         res.status(400).send({ err: 'Failed to query all presentations' })

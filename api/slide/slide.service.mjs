@@ -49,11 +49,11 @@ async function update(slide) {
         throw err
     }
 }
- async function remove(slide){
+async function remove(slide) {
     try {
         const id = slide._id
         const collection = await dbService.getCollection('slide')
-        const result=await collection.deleteOne({ _id: new ObjectId(id) })
+        const result = await collection.deleteOne({ _id: new ObjectId(id) })
         console.log(result)
         await presService.removeSlideFromPres(slide.presTitle, id)
         return slide
@@ -62,4 +62,4 @@ async function update(slide) {
         throw err
     }
 
- }
+}

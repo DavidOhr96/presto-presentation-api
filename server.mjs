@@ -17,10 +17,10 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 import { presRoutes } from './api/pres/pres.routes.mjs'
-import{ slideRoutes} from './api/slide/slide.routes.mjs'
+import { slideRoutes } from './api/slide/slide.routes.mjs'
 
-app.use('/api/pres',presRoutes)
-app.use('/api/slide',slideRoutes)
+app.use('/api/pres', presRoutes)
+app.use('/api/slide', slideRoutes)
 
 
 app.get("/", (req, res) => {

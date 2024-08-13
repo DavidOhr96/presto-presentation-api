@@ -1,7 +1,7 @@
 import mongoDB from 'mongodb'
 const { MongoClient } = mongoDB
 
-import{config}from '../config/index.mjs'
+import { config } from '../config/index.mjs'
 
 export const dbService = {
     getCollection
@@ -22,11 +22,11 @@ async function connect() {
     if (dbConn) return dbConn
     try {
         const client = await MongoClient.connect(config.dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
-        const db=client.db(config.dbName)
-        dbConn=db
+        const db = client.db(config.dbName)
+        dbConn = db
         return db
     }
-    catch(err){
+    catch (err) {
         throw err
     }
 }
